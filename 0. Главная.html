@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Налоговая электронная служба для физических лиц — Главная</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+
+        /* --- Background Image Container --- */
+        .page-wrapper {
+            position: relative;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            background-color: #4a90e2;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Overlay to ensure text readability */
+        .page-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(30, 100, 200, 0.4) 0%, rgba(30, 100, 200, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* --- Header --- */
+        .header {
+            position: relative;
+            z-index: 10;
+            background-color: rgba(22, 119, 255, 0.85);
+            backdrop-filter: blur(4px);
+            color: #fff;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 60px;
+        }
+        .header-logo {
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .header-right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+        .header-search {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 0 10px;
+            height: 32px;
+            width: 220px;
+        }
+        .header-search input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            flex: 1;
+            font-size: 13px;
+        }
+        .header-search input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        .header-search svg {
+            fill: rgba(255,255,255,0.8);
+            width: 16px;
+            height: 16px;
+        }
+        .header-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-nav-links span {
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        .header-nav-links span:hover {
+            opacity: 1;
+        }
+        .header-nav-links .divider {
+            opacity: 0.4;
+        }
+        .header-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .header-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: #888;
+        }
+        .header-menu {
+            display: flex;
+            padding: 0 40px;
+            gap: 30px;
+            height: 48px;
+            align-items: center;
+        }
+        .header-menu a {
+            font-size: 16px;
+            color: #fff;
+            opacity: 0.85;
+            padding: 0 4px;
+            position: relative;
+            height: 48px;
+            display: flex;
+            align-items: center;
+        }
+        .header-menu a.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+        .header-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 2px 2px 0 0;
+        }
+        .header-menu a:hover {
+            opacity: 1;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10%;
+            margin-top: -40px; /* Offset for visual balance */
+        }
+
+        /* Left Side Text */
+        .hero-text {
+            color: #fff;
+            max-width: 600px;
+        }
+        .hero-chinese {
+            font-size: 72px;
+            font-weight: 700;
+            font-family: 'KaiTi', 'STKaiti', serif;
+            line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+        .hero-chinese .small {
+            font-size: 48px;
+            display: block;
+            margin-top: 10px;
+        }
+        .hero-english {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            font-weight: 300;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .hero-english span {
+            display: block;
+            font-size: 14px;
+            letter-spacing: 3px;
+            margin-top: 4px;
+        }
+        .hero-subtitle {
+            margin-top: 30px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0.85;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .hero-subtitle .divider {
+            width: 1px;
+            height: 14px;
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        /* Right Side Card */
+        .user-card {
+            width: 380px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background-color: #fff;
+            margin-right: 5%;
+        }
+        .user-card-header {
+            background: linear-gradient(135deg, rgba(100, 180, 255, 0.9), rgba(60, 130, 220, 0.9));
+            padding: 30px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .user-card-header::before {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .user-card-avatar {
+            width: 56px;
+            height: 56px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.8);
+        }
+        .user-card-avatar svg {
+            width: 36px;
+            height: 36px;
+            fill: #4a90e2;
+        }
+        .user-card-greeting {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            z-index: 1;
+        }
+        .user-card-body {
+            padding: 30px 24px;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-profile {
+            width: 100%;
+            padding: 12px 0;
+            border: 1px solid #1677ff;
+            background-color: transparent;
+            color: #1677ff;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .btn-profile:hover {
+            background-color: #e6f0ff;
+        }
+
+        /* --- Floating Help Button --- */
+        .floating-help {
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .floating-help-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #1677ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(22,119,255,0.4);
+            transition: background-color 0.2s;
+        }
+        .floating-help-icon:hover {
+            background-color: #4096ff;
+        }
+        .floating-help-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+        .floating-help-text {
+            font-size: 12px;
+            color: #fff;
+            background-color: #1677ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(22,119,255,0.3);
+            white-space: nowrap;
+        }
+
+        /* --- Explanations --- */
+        .explanations {
+            position: relative;
+            z-index: 10;
+            background-color: #fff;
+            padding: 30px 40px;
+            margin-top: 40px;
+            border-top: 4px solid #1677ff;
+        }
+        .explanations h2 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .explanations pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            .header-top {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 16px;
+                gap: 10px;
+            }
+            .header-menu {
+                padding: 0 16px;
+                overflow-x: auto;
+                gap: 16px;
+            }
+            .header-menu a {
+                font-size: 14px;
+                white-space: nowrap;
+            }
+            .main-content {
+                flex-direction: column;
+                padding: 40px 16px;
+                gap: 40px;
+                align-items: center;
+            }
+            .hero-chinese {
+                font-size: 40px;
+                text-align: center;
+            }
+            .hero-chinese .small {
+                font-size: 28px;
+            }
+            .hero-english {
+                font-size: 14px;
+                text-align: center;
+            }
+            .hero-subtitle {
+                font-size: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .user-card {
+                width: 100%;
+                margin-right: 0;
+            }
+            .explanations {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="header-logo">Налоговая электронная служба для физических лиц</div>
+                <div class="header-right-nav">
+                    <div class="header-search">
+                        <input type="text" placeholder="Поиск">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </div>
+                    <div class="header-nav-links">
+                        <span>Задачи</span>
+                        <span class="divider">|</span>
+                        <span>Мобильное приложение</span>
+                        <span class="divider">|</span>
+                        <span>Центр помощи</span>
+                        <span class="divider">|</span>
+                        <span>Загрузки</span>
+                        <span class="divider">|</span>
+                        <span>Электронная налоговая служба</span>
+                    </div>
+                    <div class="header-avatar">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <nav class="header-menu">
+                <a href="#" class="active">Главная</a>
+                <a href="#">Подать налоговую декларацию</a>
+                <a href="#">Запросы</a>
+                <a href="#">Общественные услуги</a>
+                <a href="#">Специальные приложения</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Hero Text -->
+            <div class="hero-text">
+                <div class="hero-chinese">
+                    Все для меня
+                    <span class="small">Я для всех</span>
+                </div>
+                <div class="hero-english">
+                    ONE FOR ALL
+                    <span>ALL FOR ONE</span>
+                </div>
+                <div class="hero-subtitle">
+                    <span>Организовано Государственной налоговой администрацией КНР</span>
+                    <span class="divider"></span>
+                    <span>Получать выгоду от налоговой реформы</span>
+                    <span class="divider"></span>
+                    <span>Выполнять налоговые обязанности</span>
+                </div>
+            </div>
+
+            <!-- Right User Card -->
+            <div class="user-card">
+                <div class="user-card-header">
+                    <div class="user-card-avatar">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="user-card-greeting">Здравствуйте, ВАДИМ РИДФИНС</div>
+                </div>
+                <div class="user-card-body">
+                    <button class="btn-profile">Заполнить личные данные</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Help Button -->
+        <div class="floating-help">
+            <div class="floating-help-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            </div>
+            <div class="floating-help-text">Консультация</div>
+        </div>
+    </div>
+
+    <!-- Explanations -->
+    <div class="explanations">
+        <h2>Пояснения (перевод и словарь)</h2>
+        <pre>
+============================================
+[ВАРИАНТ 1: ПЕРЕВОД + СЛОВАРЬ]
+============================================
+
+┌─ ВЕРХНИЙ БАННЕР ──────────────────────────
+│  [Логотип] 自然人电子税务局
+│  (Налоговая электронная служба для физических лиц)
+│
+│  [Строка адресов]
+│  tpass.chinatax.gov.cn:844
+│  etax.chinatax.gov.cn
+│
+│  [Кнопка] PepeBecT
+│  (Перевести)
+│
+│  [Кнопка] CnpocTbAnicyAl
+│  (Справка)
+│
+│  [Кнопка] ENG
+│  (Английский)
+│
+│  [Повтор логотипа] 自然人电子税务局
+│
+└──────────────────────────────────────────
+
+┌─ БЛОК ПРИВЕТСТВИЯ ────────────────────────
+│  Hi, VADIM RIDFINS
+│  (Здравствуйте, ВАДИМ РИДФИНС)
+│
+│  [Кнопка] 完善个人信息
+│  (Заполнить личные данные)
+│
+└──────────────────────────────────────────
+
+┌─ ОСНОВНАЯ НАВИГАЦИЯ ──────────────────────
+│  [Пункт] 待办
+│  (Задачи)
+│
+│  [Пункт] 手机APP
+│  (Мобильное приложение)
+│
+│  [Пункт] 帮助中心
+│  (Центр помощи)
+│
+│  [Пункт] 下载服务
+│  (Загрузки)
+│
+│  [Пункт] 电子税务局
+│  (Электронная налоговая служба)
+│
+│  [Пункт] 首页
+│  (Главная)
+│
+│  [Пункт] 我要办税
+│  (Подать налоговую декларацию)
+│
+│  [Пункт] 我要查询
+│  (Запросы)
+│
+│  [Пункт] 公众服务
+│  (Общественные услуги)
+│
+│  [Пункт] 特色应用
+│  (Специальные приложения)
+│
+└──────────────────────────────────────────
+
+┌─ ЦЕНТРАЛЬНЫЙ БЛОК ────────────────────────
+│  人人为我
+│  (Все для меня)
+│
+│  AND ONE FOR ALL
+│  ALL FOR ONE
+│  (Один за всех, все за одного)
+│
+│  我为人人
+│  (Я для всех)
+│
+└──────────────────────────────────────────
+
+┌─ НИЖНИЙ БАННЕР ───────────────────────────
+│  [Строка] 国家税务总局主办
+│  (Организовано Государственной налоговой администрацией КНР)
+│
+│  享受税改红利
+│  (Получать выгоду от налоговой реформы)
+│
+│  履行纳税义务
+│  (Выполнять налоговые обязанности)
+│
+│  [Кнопка] 我要咨询
+│  (Консультация)
+│
+│  [Кнопка] ENG
+│  (Английский)
+│
+└──────────────────────────────────────────
+
+┌─ СИСТЕМНАЯ ИНФОРМАЦИЯ ────────────────────
+│  27.06.2026
+│  10:47:11
+│
+└──────────────────────────────────────────
+
+============================================
+[СЛОВАРЬ КЛЮЧЕВЫХ ТЕРМИНОВ]
+============================================
+自然人电子税务局 → Налоговая электронная служба для физических лиц
+待办 → Задачи
+手机APP → Мобильное приложение
+帮助中心 → Центр помощи
+下载服务 → Загрузки
+电子税务局 → Электронная налоговая служба
+首页 → Главная
+我要办税 → Подать налоговую декларацию
+我要查询 → Запросы
+公众服务 → Общественные услуги
+特色应用 → Специальные приложения
+完善个人信息 → Заполнить личные данные
+国家税务总局主办 → Организовано Государственной налоговой администрацией КНР
+享受税改红利 → Получать выгоду от налоговой реформы
+履行纳税义务 → Выполнять налоговые обязанности
+我要咨询 → Консультация
+人人为我 → Все для меня
+我为人人 → Я для всех
+
+============================================
+
+
+============================================
+[ВАРИАНТ 2: ПОЛНОСТЬЮ НА РУССКОМ ЯЗЫКЕ]
+============================================
+
+┌─ ВЕРХНИЙ БАННЕР ──────────────────────────
+│  [Логотип] Налоговая электронная служба для физических лиц
+│
+│  [Строка адресов]
+│  tpass.chinatax.gov.cn:844
+│  etax.chinatax.gov.cn
+│
+│  [Кнопка] Перевести
+│  [Кнопка] Справка
+│  [Кнопка] Английский
+│
+│  [Повтор логотипа] Налоговая электронная служба для физических лиц
+│
+└──────────────────────────────────────────
+
+┌─ БЛОК ПРИВЕТСТВИЯ ────────────────────────
+│  Здравствуйте, ВАДИМ РИДФИНС
+│
+│  [Кнопка] Заполнить личные данные
+│
+└──────────────────────────────────────────
+
+┌─ ОСНОВНАЯ НАВИГАЦИЯ ──────────────────────
+│  [Пункт] Задачи
+│  [Пункт] Мобильное приложение
+│  [Пункт] Центр помощи
+│  [Пункт] Загрузки
+│  [Пункт] Электронная налоговая служба
+│  [Пункт] Главная
+│  [Пункт] Подать налоговую декларацию
+│  [Пункт] Запросы
+│  [Пункт] Общественные услуги
+│  [Пункт] Специальные приложения
+│
+└──────────────────────────────────────────
+
+┌─ ЦЕНТРАЛЬНЫЙ БЛОК ────────────────────────
+│  Все для меня
+│
+│  Один за всех, все за одного
+│
+│  Я для всех
+│
+└──────────────────────────────────────────
+
+┌─ НИЖНИЙ БАННЕР ───────────────────────────
+│  [Строка] Организовано Государственной налоговой администрацией КНР
+│
+│  Получать выгоду от налоговой реформы
+│  Выполнять налоговые обязанности
+│
+│  [Кнопка] Консультация
+│  [Кнопка] Английский
+│
+└──────────────────────────────────────────
+
+┌─ СИСТЕМНАЯ ИНФОРМАЦИЯ ────────────────────
+│  27.06.2026
+│  10:47:11
+│
+└──────────────────────────────────────────
+
+============================================
+        </pre>
+    </div>
+
+</body>
+</html>

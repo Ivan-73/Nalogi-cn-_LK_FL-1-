@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Налоговая электронная служба для физических лиц - Обзор функций</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+
+        /* --- Header --- */
+        .header {
+            background-color: #1677ff;
+            color: #fff;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 60px;
+        }
+        .header-logo {
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .header-search-box {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 0 10px;
+            height: 32px;
+            width: 260px;
+        }
+        .header-search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            flex: 1;
+            font-size: 13px;
+        }
+        .header-search-box input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        .header-search-box svg {
+            fill: rgba(255,255,255,0.8);
+            width: 16px;
+            height: 16px;
+        }
+        .header-user-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+        }
+        .header-user-nav span {
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        .header-user-nav span:hover {
+            opacity: 1;
+        }
+        .header-user-nav .divider {
+            opacity: 0.4;
+        }
+        .header-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-left: 10px;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        .header-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: #888;
+        }
+        .header-nav {
+            display: flex;
+            padding: 0 40px;
+            gap: 30px;
+            height: 48px;
+            align-items: center;
+        }
+        .header-nav a {
+            font-size: 16px;
+            color: #fff;
+            opacity: 0.85;
+            padding: 0 4px;
+            position: relative;
+            height: 48px;
+            display: flex;
+            align-items: center;
+        }
+        .header-nav a.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+        .header-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 2px 2px 0 0;
+        }
+        .header-nav a:hover {
+            opacity: 1;
+        }
+
+        /* --- Breadcrumb --- */
+        .breadcrumb {
+            padding: 16px 40px;
+            font-size: 14px;
+            color: #888;
+            background-color: #f0f2f5;
+        }
+        .breadcrumb span {
+            color: #555;
+        }
+        .breadcrumb .sep {
+            margin: 0 8px;
+            color: #bbb;
+        }
+
+        /* --- Main Layout --- */
+        .main-container {
+            display: flex;
+            padding: 0 40px 40px 40px;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 10px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .sidebar ul li {
+            padding: 0 20px;
+            cursor: pointer;
+        }
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-size: 15px;
+            color: #333;
+            transition: color 0.2s;
+        }
+        .sidebar ul li a:hover {
+            color: #1677ff;
+        }
+        .sidebar ul li.active > a {
+            color: #1677ff;
+            font-weight: 500;
+        }
+        .sidebar ul li .arrow {
+            font-size: 12px;
+            color: #999;
+            transition: transform 0.2s;
+        }
+        .sidebar ul li.active .arrow {
+            transform: rotate(180deg);
+        }
+        .sidebar ul li .sub-menu {
+            padding-left: 20px;
+            padding-bottom: 4px;
+        }
+        .sidebar ul li .sub-menu li {
+            padding: 0;
+        }
+        .sidebar ul li .sub-menu li a {
+            font-size: 14px;
+            color: #666;
+            padding: 8px 0 8px 16px;
+            position: relative;
+        }
+        .sidebar ul li .sub-menu li a::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #999;
+        }
+        .sidebar ul li .sub-menu li.active a {
+            color: #1677ff;
+            background-color: #e6f0ff;
+            border-radius: 4px;
+            padding-left: 16px;
+            margin-right: -10px;
+        }
+        .sidebar ul li .sub-menu li.active a::before {
+            color: #1677ff;
+        }
+
+        /* --- Content Area --- */
+        .content {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 4px;
+            min-height: 500px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .content-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+        .content-body {
+            padding: 24px;
+            flex: 1;
+        }
+        .content-body h1 {
+            font-size: 24px;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 20px;
+        }
+        .content-body .link-list {
+            padding-left: 20px;
+        }
+        .content-body .link-list li {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        .content-body .link-list li a {
+            color: #1677ff;
+            cursor: pointer;
+        }
+        .content-body .link-list li a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: #232b3a;
+            color: #a0a8b8;
+            padding: 40px 40px 20px 40px;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        .footer .footer-map {
+            font-size: 16px;
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .footer-columns {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 30px;
+        }
+        .footer-col h4 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col ul li a {
+            color: #a0a8b8;
+            transition: color 0.2s;
+        }
+        .footer-col ul li a:hover {
+            color: #fff;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-top: 1px solid #3a4355;
+            padding-top: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-bottom-left {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 10px;
+        }
+        .footer-badge {
+            width: 60px;
+            height: 60px;
+            background-color: #3a4355;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0a8b8;
+            font-size: 10px;
+            text-align: center;
+            padding: 4px;
+            line-height: 1.2;
+        }
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .footer-info a {
+            color: #a0a8b8;
+        }
+        .footer-info a:hover {
+            color: #fff;
+        }
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: right;
+        }
+        .footer-qr {
+            display: flex;
+            gap: 16px;
+        }
+        .footer-qr .qr-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer-qr .qr-box {
+            width: 70px;
+            height: 70px;
+            background-color: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #333;
+            text-align: center;
+            padding: 4px;
+            background-image: repeating-linear-gradient(45deg, #ccc 0px, #ccc 2px, #fff 2px, #fff 6px);
+        }
+        .footer-qr span {
+            font-size: 12px;
+            color: #a0a8b8;
+        }
+
+        /* --- Explanations Section (from txt) --- */
+        .explanations {
+            max-width: 1600px;
+            margin: 20px auto 40px;
+            padding: 0 40px;
+        }
+        .explanations-inner {
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 30px 40px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #1677ff;
+        }
+        .explanations h2 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .explanations pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                padding: 0 16px 20px;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .header-top, .header-nav, .breadcrumb {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .header-top {
+                flex-wrap: wrap;
+                height: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                gap: 10px;
+            }
+            .header-nav {
+                overflow-x: auto;
+                gap: 16px;
+            }
+            .header-nav a {
+                font-size: 14px;
+                white-space: nowrap;
+            }
+            .footer-columns {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+            }
+            .footer-right {
+                text-align: left;
+            }
+            .explanations {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Верхний баннер -->
+    <header class="header">
+        <div class="header-top">
+            <div class="header-logo">Налоговая электронная служба для физических лиц</div>
+            <div class="header-search-box">
+                <input type="text" placeholder="Поиск">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </div>
+            <div class="header-user-nav">
+                <span>Задачи</span>
+                <span class="divider">|</span>
+                <span>Мобильное приложение</span>
+                <span class="divider">|</span>
+                <span>Центр помощи</span>
+                <span class="divider">|</span>
+                <span>Загрузки</span>
+                <span class="divider">|</span>
+                <span>Электронная налоговая служба</span>
+                <div class="header-avatar">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="#">Главная</a>
+            <a href="#">Подать налоговую декларацию</a>
+            <a href="#">Запросы</a>
+            <a href="#" class="active">Общественные услуги</a>
+            <a href="#">Специальные приложения</a>
+        </nav>
+    </header>
+
+    <!-- Навигационная цепочка -->
+    <div class="breadcrumb">
+        <span>Общественные услуги</span>
+        <span class="sep">&gt;</span>
+        <span>Центр помощи</span>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="main-container">
+        <!-- Боковое меню -->
+        <aside class="sidebar">
+            <ul>
+                <li class="active">
+                    <a href="#">Обзор функций <span class="arrow">&#9650;</span></a>
+                    <ul class="sub-menu">
+                        <li class="active"><a href="#">Обзор функций</a></li>
+                        <li><a href="#">Обзор функций платформы</a></li>
+                        <li><a href="#">Услуги платформы</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Годовой расчет совокупного дохода <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Управление аккаунтом <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Управление личной информацией <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Общественные услуги <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Выдача справок <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Управление налоговыми полномочиями <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Обжалование <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Специальные дополнительные вычеты <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Доход от предпринимательской деятельности <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Классифицированный доход <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Способы оплаты <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Сброс пароля декларации <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Кредит профессиональных налоговых услуг <span class="arrow">&#9660;</span></a>
+                </li>
+                <li>
+                    <a href="#">Индивидуальная пенсия <span class="arrow">&#9660;</span></a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Контентная область -->
+        <main class="content">
+            <div class="content-header">Обзор функций</div>
+            <div class="content-body">
+                <h1>Обзор функций</h1>
+                <ul class="link-list">
+                    <li><a href="#">Обзор функций платформы</a></li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <!-- Блок пояснений из TXT -->
+    <div class="explanations">
+        <div class="explanations-inner">
+            <h2>Пояснения (перевод и словарь)</h2>
+            <pre>
+============================================
+[ВАРИАНТ 1: ПЕРЕВОД + СЛОВАРЬ]
+============================================
+
+┌─ ВЕРХНИЙ БАННЕР ──────────────────────────
+│  [Логотип] 自然人电子税务局
+│  (Налоговая электронная служба для физических лиц)
+│
+│  [Строка адресов]
+│  tpass.chinatax.gov.cn:844
+│  etax.chinatax.gov.cn
+│
+│  [Кнопка] PepeBecT
+│  (Перевести)
+│
+│  [Кнопка] CnpocmTbAnicyAl
+│  (Справка)
+│
+│  [Кнопка] ENG
+│  (Английский)
+│
+│  [Повтор логотипа] 自然人电子税务局
+│
+└──────────────────────────────────────────
+
+┌─ ОСНОВНАЯ НАВИГАЦИЯ (ВЕРХНЯЯ) ──────────
+│  [Пункт] 待办
+│  (Задачи)
+│
+│  [Пункт] 手机APP
+│  (Мобильное приложение)
+│
+│  [Пункт] 帮助中心
+│  (Центр помощи)
+│
+│  [Пункт] 下载服务
+│  (Загрузки)
+│
+│  [Пункт] 电子税务局
+│  (Электронная налоговая служба)
+│
+│  [Пункт] 首页
+│  (Главная)
+│
+│  [Пункт] 我要办税
+│  (Подать налоговую декларацию)
+│
+│  [Пункт] 我要查询
+│  (Запросы)
+│
+│  [Пункт] 公众服务
+│  (Общественные услуги)
+│
+│  [Пункт] 特色应用
+│  (Специальные приложения)
+│
+└──────────────────────────────────────────
+
+┌─ НАВИГАЦИОННАЯ ЦЕПОЧКА ──────────────────
+│  公众服务 > 帮助中心
+│  (Общественные услуги > Центр помощи)
+│
+└──────────────────────────────────────────
+
+┌─ ЗАГОЛОВОК БЛОКА ─────────────────────────
+│  功能简介
+│  (Обзор функций)
+│
+└──────────────────────────────────────────
+
+┌─ СОДЕРЖАНИЕ БЛОКА (ЛЕВАЯ ЧАСТЬ) ─────────
+│  · 功能简介
+│  (· Обзор функций)
+│
+│  · 平台功能简介
+│  (· Обзор функций платформы)
+│
+│  · 平台服务
+│  (· Услуги платформы)
+│
+│  综合所得年度汇算
+│  (Годовой расчет совокупного дохода)
+│
+│  账户管理
+│  (Управление аккаунтом)
+│
+│  个人信息管理
+│  (Управление личной информацией)
+│
+│  公众服务
+│  (Общественные услуги)
+│
+│  证明开具
+│  (Выдача справок)
+│
+│  办税授权管理
+│  (Управление налоговыми полномочиями)
+│
+│  异议申诉
+│  (Обжалование)
+│
+└──────────────────────────────────────────
+
+┌─ ДОПОЛНИТЕЛЬНЫЕ РАЗДЕЛЫ (ИЗ 1_1.PNG) ────
+│  专项附加扣除
+│  (Специальные дополнительные вычеты)
+│
+│  经营所得
+│  (Доход от предпринимательской деятельности)
+│
+│  分类所得
+│  (Классифицированный доход)
+│
+│  支付方式
+│  (Способы оплаты)
+│
+│  重置申报密码
+│  (Сброс пароля декларации)
+│
+│  涉税专业服务信用
+│  (Кредит профессиональных налоговых услуг)
+│
+│  个人养老金
+│  (Индивидуальная пенсия)
+│
+│  网站地图
+│  (Карта сайта)
+│
+│  我要办税
+│  (Подать налоговую декларацию)
+│
+│  我要查询
+│  (Запросы)
+│
+│  公众服务
+│  (Общественные услуги)
+│
+│  特色应用
+│  (Специальные приложения)
+│
+│  专项附加扣除填报
+│  (Заполнение специальных дополнительных вычетов)
+│
+│  申报信息查询
+│  (Запрос информации о декларации)
+│
+│  票证查验
+│  (Проверка квитанций)
+│
+│  税费申报
+│  (Подача налогов и сборов)
+│
+│  备案信息查询
+│  (Запрос регистрационной информации)
+│
+│  帮助中心
+│  (Центр помощи)
+│
+│  我的委托
+│  (Мои поручения)
+│
+│  其他查询
+│  (Другие запросы)
+│
+│  政府网站
+│  (Правительственный сайт)
+│
+└──────────────────────────────────────────
+
+┌─ НИЖНИЙ БАННЕР ───────────────────────────
+│  [Строка] 国家税务总局主办
+│  (Организовано Государственной налоговой администрацией КНР)
+│
+│  纳税服务热线：12366
+│  (Горячая линия налоговой службы: 12366)
+│
+│  党政机关
+│  (Партийные и государственные органы)
+│
+│  找错
+│  (Найти ошибку)
+│
+│  版权所有：国家税务总局
+│  (Все права защищены: Государственная налоговая администрация КНР)
+│
+│  网站注明
+│  (Примечание к сайту)
+│
+│  京ICP备13021685号-3
+│  (Регистрационный номер ICP: 京ICP备13021685号-3)
+│
+│  个人信息及隐私保护政策
+│  (Политика защиты личной информации и конфиденциальности)
+│
+└──────────────────────────────────────────
+
+┌─ СИСТЕМНАЯ ИНФОРМАЦИЯ ────────────────────
+│  27.06.2026
+│  10:57:51 / 10:58:24
+│  22°
+│
+└──────────────────────────────────────────
+
+============================================
+[СЛОВАРЬ КЛЮЧЕВЫХ ТЕРМИНОВ]
+============================================
+功能简介 → Обзор функций
+平台功能简介 → Обзор функций платформы
+平台服务 → Услуги платформы
+综合所得年度汇算 → Годовой расчет совокупного дохода
+账户管理 → Управление аккаунтом
+个人信息管理 → Управление личной информацией
+证明开具 → Выдача справок
+办税授权管理 → Управление налоговыми полномочиями
+异议申诉 → Обжалование
+专项附加扣除 → Специальные дополнительные вычеты
+经营所得 → Доход от предпринимательской деятельности
+分类所得 → Классифицированный доход
+支付方式 → Способы оплаты
+重置申报密码 → Сброс пароля декларации
+涉税专业服务信用 → Кредит профессиональных налоговых услуг
+个人养老金 → Индивидуальная пенсия
+网站地图 → Карта сайта
+专项附加扣除填报 → Заполнение специальных дополнительных вычетов
+申报信息查询 → Запрос информации о декларации
+票证查验 → Проверка квитанций
+税费申报 → Подача налогов и сборов
+备案信息查询 → Запрос регистрационной информации
+我的委托 → Мои поручения
+其他查询 → Другие запросы
+政府网站 → Правительственный сайт
+纳税服务热线：12366 → Горячая линия налоговой службы: 12366
+党政机关 → Партийные и государственные органы
+找错 → Найти ошибку
+版权所有 → Все права защищены
+网站注明 → Примечание к сайту
+个人信息及隐私保护政策 → Политика защиты личной информации и конфиденциальности
+
+============================================
+
+
+============================================
+[ВАРИАНТ 2: ПОЛНОСТЬЮ НА РУССКОМ ЯЗЫКЕ]
+============================================
+
+┌─ ВЕРХНИЙ БАННЕР ──────────────────────────
+│  [Логотип] Налоговая электронная служба для физических лиц
+│
+│  [Строка адресов]
+│  tpass.chinatax.gov.cn:844
+│  etax.chinatax.gov.cn
+│
+│  [Кнопка] Перевести
+│  [Кнопка] Справка
+│  [Кнопка] Английский
+│
+│  [Повтор логотипа] Налоговая электронная служба для физических лиц
+│
+└──────────────────────────────────────────
+
+┌─ ОСНОВНАЯ НАВИГАЦИЯ (ВЕРХНЯЯ) ──────────
+│  [Пункт] Задачи
+│  [Пункт] Мобильное приложение
+│  [Пункт] Центр помощи
+│  [Пункт] Загрузки
+│  [Пункт] Электронная налоговая служба
+│  [Пункт] Главная
+│  [Пункт] Подать налоговую декларацию
+│  [Пункт] Запросы
+│  [Пункт] Общественные услуги
+│  [Пункт] Специальные приложения
+│
+└──────────────────────────────────────────
+
+┌─ НАВИГАЦИОННАЯ ЦЕПОЧКА ──────────────────
+│  Общественные услуги > Центр помощи
+│
+└──────────────────────────────────────────
+
+┌─ ЗАГОЛОВОК БЛОКА ─────────────────────────
+│  Обзор функций
+│
+└──────────────────────────────────────────
+
+┌─ СОДЕРЖАНИЕ БЛОКА (ЛЕВАЯ ЧАСТЬ) ─────────
+│  · Обзор функций
+│  · Обзор функций платформы
+│  · Услуги платформы
+│  Годовой расчет совокупного дохода
+│  Управление аккаунтом
+│  Управление личной информацией
+│  Общественные услуги
+│  Выдача справок
+│  Управление налоговыми полномочиями
+│  Обжалование
+│
+└──────────────────────────────────────────
+
+┌─ ДОПОЛНИТЕЛЬНЫЕ РАЗДЕЛЫ ──────────────────
+│  Специальные дополнительные вычеты
+│  Доход от предпринимательской деятельности
+│  Классифицированный доход
+│  Способы оплаты
+│  Сброс пароля декларации
+│  Кредит профессиональных налоговых услуг
+│  Индивидуальная пенсия
+│  Карта сайта
+│  Подать налоговую декларацию
+│  Запросы
+│  Общественные услуги
+│  Специальные приложения
+│  Заполнение специальных дополнительных вычетов
+│  Запрос информации о декларации
+│  Проверка квитанций
+│  Подача налогов и сборов
+│  Запрос регистрационной информации
+│  Центр помощи
+│  Мои поручения
+│  Другие запросы
+│  Правительственный сайт
+│
+└──────────────────────────────────────────
+
+┌─ НИЖНИЙ БАННЕР ───────────────────────────
+│  [Строка] Организовано Государственной налоговой администрацией КНР
+│
+│  Горячая линия налоговой службы: 12366
+│
+│  Партийные и государственные органы
+│  Найти ошибку
+│  Все права защищены: Государственная налоговая администрация КНР
+│  Примечание к сайту
+│  Регистрационный номер ICP: 京ICP备13021685号-3
+│  Политика защиты личной информации и конфиденциальности
+│
+└──────────────────────────────────────────
+
+┌─ СИСТЕМНАЯ ИНФОРМАЦИЯ ────────────────────
+│  27.06.2026
+│  10:57:51 / 10:58:24
+│  22°
+│
+└──────────────────────────────────────────
+
+============================================
+            </pre>
+        </div>
+    </div>
+
+    <!-- Нижний баннер -->
+    <footer class="footer">
+        <div class="footer-map">Карта сайта</div>
+        <div class="footer-columns">
+            <div class="footer-col">
+                <h4>Подать налоговую декларацию</h4>
+                <ul>
+                    <li><a href="#">Заполнение специальных дополнительных вычетов</a></li>
+                    <li><a href="#">Подача налогов и сборов</a></li>
+                    <li><a href="#">Мои поручения</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Запросы</h4>
+                <ul>
+                    <li><a href="#">Запрос информации о декларации</a></li>
+                    <li><a href="#">Запрос регистрационной информации</a></li>
+                    <li><a href="#">Другие запросы</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Общественные услуги</h4>
+                <ul>
+                    <li><a href="#">Проверка квитанций</a></li>
+                    <li><a href="#">Центр помощи</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Специальные приложения</h4>
+                <ul>
+                    <li><a href="#"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-left">
+                <div class="footer-badges">
+                    <div class="footer-badge">Партийные и государственные органы</div>
+                    <div class="footer-badge">Правительственный сайт<br>Найти ошибку</div>
+                </div>
+                <div class="footer-info">
+                    <span>Организовано Государственной налоговой администрацией КНР</span>
+                    <span>Все права защищены: Государственная налоговая администрация КНР</span>
+                    <span>Регистрационный номер ICP: 京ICP备13021685号-3</span>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div>Горячая линия налоговой службы: 12366</div>
+                <a href="#">Примечание к сайту</a>
+                <a href="#">Политика защиты личной информации и конфиденциальности</a>
+                <div class="footer-qr">
+                    <div class="qr-item">
+                        <div class="qr-box">QR</div>
+                        <span>Мобильное приложение</span>
+                    </div>
+                    <div class="qr-item">
+                        <div class="qr-box">QR</div>
+                        <span>Официальный аккаунт WeChat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
